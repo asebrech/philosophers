@@ -1,7 +1,9 @@
-make --dry-run --keep-going --print-directory
-make: Entering directory '/home/alois/Documents/philosophers'
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/asebrech/Documents/philosophers'
 gcc -Wall -Wextra -Werror -Iincludes -c srcs/main.c -o srcs/main.o
+ 
+gcc -Wall -Wextra -Werror -Iincludes -c srcs/utiles.c -o srcs/utiles.o
 gcc -Wall -Wextra -Werror -Iincludes -c srcs/philosophers.c -o srcs/philosophers.o
-gcc -Wall -Wextra -Werror -Iincludes srcs/main.o srcs/philosophers.o -o philosophers
-make: Leaving directory '/home/alois/Documents/philosophers'
+gcc -Wall -Wextra -Werror -pthread -Iincludes srcs/main.o srcs/utiles.o srcs/philosophers.o -o philosophers
+make: Leaving directory `/Users/asebrech/Documents/philosophers'
  

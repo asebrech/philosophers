@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alois <alois@student.42.fr>                +#+  +:+       +#+         #
+#    By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/23 16:13:10 by asebrech          #+#    #+#              #
-#    Updated: 2021/09/22 12:52:00 by alois            ###   ########.fr        #
+#    Updated: 2021/09/27 14:00:55 by asebrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ HEADER = includes
 NAME = philosophers
 RM = rm -rf
 SRC =	srcs/main.c	\
+		srcs/utiles.c \
 		srcs/philosophers.c	
 SRCB =
 
@@ -34,7 +35,7 @@ bonus :
 	@make WHITH_BONUS=1 all
 
 $(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) -I$(HEADER) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) -pthread -I$(HEADER) $(OBJ) -o $(NAME)
 
 clean :
 	$(RM) */*.o
