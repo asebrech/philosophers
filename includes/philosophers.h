@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:16:48 by alois             #+#    #+#             */
-/*   Updated: 2021/09/28 17:04:38 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/09/28 22:21:01 by alois            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_philo
 	int				t_eat;
 	int				t_sleep;
 	int				nb_eat;
+	long long		time;
 	pthread_mutex_t	mutex;
 }				t_philo;
 
@@ -35,6 +36,6 @@ void		philosophers(t_philo *philo);
 int			ft_isallnum(char *str);
 long int	ft_atoi(const char *str);
 long long	actualtime(void);
-void		ft_usleep(int ms);	
+int			ft_usleep(int ms);	
 
 #endif
