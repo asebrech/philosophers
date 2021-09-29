@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:19:02 by alois             #+#    #+#             */
-/*   Updated: 2021/09/29 11:59:37 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/09/29 15:14:39 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ int	check_args(int ac, char **av)
 
 void	fill_struct(int ac, char **av, t_philo *philo)
 {
+	int	i;
+
+	i = -1;
 	philo->nb_philo = ft_atoi(av[0]);
 	philo->nu_philo = 0;
 	philo->t_die = ft_atoi(av[1]);
@@ -52,6 +55,9 @@ void	fill_struct(int ac, char **av, t_philo *philo)
 	else
 		philo->nb_eat = -1;
 	philo->count_eat = 0;
+	philo->fork = malloc(sizeof(int) * philo->nb_philo);
+	while (++i < philo->nb_philo)
+		philo->fork[i] = 1;
 	/*
 	printf("nb_philo = %d\n", philo->nb_philo);
 	printf("t_die = %d\n", philo->t_die);
@@ -72,6 +78,7 @@ int	main(int ac, char **av)
 			return (1);
 		fill_struct(ac - 1, av + 1, &philo);
 		philosophers(&philo);
+		free(philo.fork);
 	}
 	else if (ac != 1)
 		printf("Error\nwrong number of arguments\n");

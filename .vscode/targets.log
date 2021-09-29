@@ -7,7 +7,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
 
-# Make data base, printed on Wed Sep 29 09:24:32 2021
+# Make data base, printed on Wed Sep 29 15:06:45 2021
 
 # Variables
 
@@ -44,7 +44,7 @@ MAKEFILE_LIST :=  Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/zz/zyxvpxvq6csfxvn_n0000j9w0004_g/T/vscode-ipc-b17d5748-7c44-4c53-81a3-2502134fdd4f.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/zz/zyxvpxvq6csfxvn_n0000j9w0004_g/T/vscode-ipc-f5e63f24-506b-48f6-94e7-46135788de16.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -160,7 +160,7 @@ VSCODE_PID = 1986
 
 # Directories
 
-# . (device 16777224, inode 1658084): 7 files, no impossibilities.
+# . (device 16777224, inode 1663077): 7 files, no impossibilities.
 
 # 7 files, no impossibilities in 1 directories.
 
@@ -193,7 +193,7 @@ all: philosophers
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-09-29 09:23:48
+#  Last modified 2021-09-29 15:06:23
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -289,7 +289,7 @@ srcs/main.o:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Wed Sep 29 09:24:32 2021
+# Finished Make data base on Wed Sep 29 15:06:45 2021
 
  
 make: *** No rule to make target `srcs/main.o', needed by `philosophers'.  Stop.

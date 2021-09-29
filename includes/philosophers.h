@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:16:48 by alois             #+#    #+#             */
-/*   Updated: 2021/09/29 12:39:30 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/09/29 15:08:07 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 
 typedef struct s_philo
 {
+	int				*fork;
 	int				nb_philo;
 	int				nu_philo;
 	long long		t_die;
