@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
+/*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 13:42:03 by asebrech          #+#    #+#             */
-/*   Updated: 2021/09/28 20:41:45 by alois            ###   ########.fr       */
+/*   Updated: 2021/09/29 10:59:14 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,9 @@ int	ft_usleep(int ms)
 	while (actualtime() - time < ms)
 		usleep(ms);
 	return (0);
+}
+
+long long	timestamp(long long time)
+{
+	return (actualtime() - time);
 }

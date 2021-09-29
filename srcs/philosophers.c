@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
+/*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:20:05 by alois             #+#    #+#             */
-/*   Updated: 2021/09/28 23:35:54 by alois            ###   ########.fr       */
+/*   Updated: 2021/09/29 12:36:18 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,76 +22,60 @@ int	get_philo_nu(t_philo *philo)
 	return (nu);
 }
 
-long long	timestamp(t_philo *philo)
+void	died(int nu, long long time)
 {
-	return (actualtime() - philo->time);
+	printf("timestamp : %lld philo %d died\n", timestamp(time), nu);
+	exit (0);
 }
 
-void	died(t_philo *philo, int nu, long long *total)
+void	philo_routine(t_philo *philo, int nu, long long *time)
 {
-	*total += timestamp(philo);
-	printf("timestamp : %lld philo %d died\n", *total, nu);
-}
-
-void	take_fork(t_philo *philo, int nu, long long *total)
-{
+	pthread_mutex_unlock(&philo->mutex);
+	*time = actualtime();
 	pthread_mutex_lock(&philo->mutex);
 	philo->nb_philo -= 2;
 	pthread_mutex_unlock(&philo->mutex);
-	*total += timestamp(philo);
-	printf("timestamp : %lld philo %d has taken a fork\n", *total, nu);
-}
-
-void	eating(t_philo *philo, int nu, long long *total)
-{
-	*total += timestamp(philo);
-	printf("timestamp : %lld philo %d is eating\n", *total, nu);
+	printf("\e[32mtimestamp : %lld philo %d has taken a fork\n",
+		timestamp(*time), nu);
+	printf("\e[31mtimestamp : %lld philo %d is eating\n", timestamp(*time), nu);
 	ft_usleep(philo->t_eat);
+	pthread_mutex_lock(&philo->mutex);
+	if (philo->nb_eat != -1)
+	{
+		philo->count_eat += 1;
+		if (philo->count_eat == philo->nb_eat)
+			exit (0);
+	}
+	pthread_mutex_unlock(&philo->mutex);
 	pthread_mutex_lock(&philo->mutex);
 	philo->nb_philo += 2;
 	pthread_mutex_unlock(&philo->mutex);
-}
-
-void	sleeping(t_philo *philo, int nu, long long *total)
-{
-	*total += timestamp(philo);
-	printf("timestamp : %lld philo %d is sleeping\n", *total, nu);
+	printf("\e[33mtimestamp : %lld philo %d is sleeping\n", timestamp(*time), nu);
 	ft_usleep(philo->t_sleep);
-}
-
-void	thinking(t_philo *philo, int nu, long long *total)
-{
-	*total += timestamp(philo);
-	printf("timestamp : %lld philo %d is thinkping\n", *total, nu);
+	printf("\e[34mtimestamp : %lld philo %d is thinking\n", timestamp(*time), nu);
 }
 
 void	*routine(void *arg)
 {
 	t_philo		*philo;
 	int			nu;
-	long long	total;
+	long long	time;
 
 	philo = (t_philo *)arg;
 	nu = get_philo_nu(philo);
-	total = 0;
+	time = actualtime();
 	while (1)
 	{
-		if (total > philo->t_die)
-		{
-			died(philo, nu, &total);
-			return (NULL);
-		}
+		pthread_mutex_lock(&philo->mutex);
+		if (timestamp(time) > philo->t_die)
+			died(nu, time);
 		if (philo->nb_philo >= 2)
-		{
-			take_fork(philo, nu, &total);
-			eating(philo, nu, &total);
-			sleeping(philo, nu, &total);
-			thinking(philo, nu, &total);
-			total = 0;
-		}
-		total += timestamp(philo);
+			philo_routine(philo, nu, &time);
+		else
+			pthread_mutex_unlock(&philo->mutex);
+		usleep(200);
 	}
-	return (philo);
+	return (NULL);
 }
 
 void	philosophers(t_philo *philo)
@@ -101,7 +85,6 @@ void	philosophers(t_philo *philo)
 
 	pthread_mutex_init(&philo->mutex, NULL);
 	thread = malloc(sizeof(thread) * philo->nb_philo);
-	philo->time = actualtime();
 	i = -1;
 	while (++i < philo->nb_philo)
 		pthread_create(&thread[i], NULL, &routine, philo);

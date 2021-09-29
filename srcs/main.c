@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:19:02 by alois             #+#    #+#             */
-/*   Updated: 2021/09/28 17:40:21 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/09/29 11:59:37 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,10 @@ void	fill_struct(int ac, char **av, t_philo *philo)
 	philo->t_eat = ft_atoi(av[2]);
 	philo->t_sleep = ft_atoi(av[3]);
 	if (ac == 5)
-		philo->nb_eat = ft_atoi(av[4]);
+		philo->nb_eat = ft_atoi(av[4]) * philo->nb_philo;
 	else
 		philo->nb_eat = -1;
+	philo->count_eat = 0;
 	/*
 	printf("nb_philo = %d\n", philo->nb_philo);
 	printf("t_die = %d\n", philo->t_die);
