@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:16:48 by alois             #+#    #+#             */
-/*   Updated: 2021/09/29 15:08:07 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/03 17:00:23 by alois            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,22 @@
 # include <limits.h>
 # include <sys/time.h>
 
-typedef struct s_philo
+typedef struct s_info
 {
-	int				*fork;
 	int				nb_philo;
-	int				nu_philo;
 	long long		t_die;
 	int				t_eat;
 	int				t_sleep;
 	int				nb_eat;
-	int				count_eat;
-	pthread_mutex_t	mutex;
+}				t_info;	
+
+typedef struct s_philo
+{
+	t_info			*info;
+	int				nu_philo;
+	pthread_mutex_t	*mutex;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 }				t_philo;
 
 void		philosophers(t_philo *philo);

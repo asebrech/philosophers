@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:19:02 by alois             #+#    #+#             */
-/*   Updated: 2021/09/29 15:14:39 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/03 17:41:28 by alois            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,45 +40,56 @@ int	check_args(int ac, char **av)
 	return (0);
 }
 
-void	fill_struct(int ac, char **av, t_philo *philo)
+void	fill_info(int ac, char **av, t_info *info)
 {
-	int	i;
+	info->nb_philo = ft_atoi(av[0]);
+	info->t_die = ft_atoi(av[1]);
+	info->t_eat = ft_atoi(av[2]);
+	info->t_sleep = ft_atoi(av[3]);
+	if (ac == 5)
+		info->nb_eat = ft_atoi(av[4]);
+	else
+		info->nb_eat = -1;
+}
+
+void	fill_philo(t_info *info, t_philo *philo)
+{
+	int				i;
+	pthread_mutex_t	*left;
+	pthread_mutex_t	*right;
+	pthread_mutex_t	*mutex;
 
 	i = -1;
-	philo->nb_philo = ft_atoi(av[0]);
-	philo->nu_philo = 0;
-	philo->t_die = ft_atoi(av[1]);
-	philo->t_eat = ft_atoi(av[2]);
-	philo->t_sleep = ft_atoi(av[3]);
-	if (ac == 5)
-		philo->nb_eat = ft_atoi(av[4]) * philo->nb_philo;
-	else
-		philo->nb_eat = -1;
-	philo->count_eat = 0;
-	philo->fork = malloc(sizeof(int) * philo->nb_philo);
-	while (++i < philo->nb_philo)
-		philo->fork[i] = 1;
-	/*
-	printf("nb_philo = %d\n", philo->nb_philo);
-	printf("t_die = %d\n", philo->t_die);
-	printf("t_eat = %d\n", philo->t_eat);
-	printf("t_sleep = %d\n", philo->t_sleep);
-	if (ac == 5)
-		printf("nb_eat = %d\n", philo->nb_eat);
-	*/
+	mutex = NULL;
+	left = malloc(sizeof(left) * info->nb_philo);
+	right = malloc(sizeof(left) * info->nb_philo);
+	philo = malloc(sizeof(philo) * info->nb_philo);
+	while (++i < info->nb_philo)
+	{
+		philo[i].nu_philo = i + 1;
+		philo[i].mutex = mutex;
+		philo[i].info = info;
+		philo[i].left_fork = left + i;
+		if (i == info->nb_philo)
+			philo[i].right_fork = right;
+		else
+			philo[i].right_fork = right + i + 1;
+	}
 }
 
 int	main(int ac, char **av)
 {
-	t_philo	philo;
+	t_info	info;
+	t_philo	*philo;
 
+	philo = NULL;
 	if (ac == 5 || ac == 6)
 	{
 		if (check_args(ac - 1, av + 1))
 			return (1);
-		fill_struct(ac - 1, av + 1, &philo);
-		philosophers(&philo);
-		free(philo.fork);
+		fill_info(ac - 1, av + 1, &info);
+		fill_philo(&info, philo);
+		//philosophers(philo);
 	}
 	else if (ac != 1)
 		printf("Error\nwrong number of arguments\n");
