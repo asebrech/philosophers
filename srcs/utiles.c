@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utiles.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 13:42:03 by asebrech          #+#    #+#             */
-/*   Updated: 2021/09/29 10:59:14 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/04 21:12:21 by alois            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,10 @@ int	ft_usleep(int ms)
 long long	timestamp(long long time)
 {
 	return (actualtime() - time);
+}
+
+void	quit(t_philo *philo)
+{
+	free(philo->left);
+	free(philo);
 }

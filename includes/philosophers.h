@@ -6,7 +6,7 @@
 /*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:16:48 by alois             #+#    #+#             */
-/*   Updated: 2021/10/04 16:26:40 by alois            ###   ########.fr       */
+/*   Updated: 2021/10/04 21:12:55 by alois            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ long int	ft_atoi(const char *str);
 long long	actualtime(void);
 int			ft_usleep(int ms);	
 long long	timestamp(long long time);
+void		quit(t_philo *philo);
 
 #endif

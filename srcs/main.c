@@ -6,7 +6,7 @@
 /*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:19:02 by alois             #+#    #+#             */
-/*   Updated: 2021/10/04 16:42:42 by alois            ###   ########.fr       */
+/*   Updated: 2021/10/04 21:20:05 by alois            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,11 @@ int	main(int ac, char **av)
 			
 		}*/
 		philosophers(philo);
+		quit(philo);
 	}
 	else if (ac != 1)
 		printf("Error\nwrong number of arguments\n");
+	while(1)
+		;
 	return (0);
 }
