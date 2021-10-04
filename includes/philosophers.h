@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:16:48 by alois             #+#    #+#             */
-/*   Updated: 2021/10/04 12:00:20 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/04 16:26:40 by alois            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@
 
 typedef struct s_philo
 {
+	long long		time;
+	int				death;
 	int				nu_philo;
 	int				nb_philo;
 	long long		t_die;
 	int				t_eat;
 	int				t_sleep;
 	int				nb_eat;
-	pthread_mutex_t	*mutex;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
 }				t_philo;

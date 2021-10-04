@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:20:05 by alois             #+#    #+#             */
-/*   Updated: 2021/10/04 12:01:56 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/04 17:31:30 by alois            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,58 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	time = actualtime();
+	philo->time = actualtime();
 	count = 0;
 	while (1)
 	{
 		pthread_mutex_lock(philo->left);
-		printf("\e[32m%lld philo %d has taken a fork\n", timestamp(time), philo->nu_philo);
 		pthread_mutex_lock(philo->right);
+		if (philo->death)
+			return (NULL);
 		printf("\e[32m%lld philo %d has taken a fork\n", timestamp(time), philo->nu_philo);
-		if (philo->nb_eat != -1)
-		{
-			count += 1;
-			if (count == philo->nb_eat)
-				return (NULL);
-		}
+		printf("\e[32m%lld philo %d has taken a fork\n", timestamp(time), philo->nu_philo);
+		count += 1;
 		printf("\e[33m%lld philo %d is eating (%d)\n", timestamp(time), philo->nu_philo, count);
-		ft_usleep(philo->t_eat);
+		usleep(philo->t_eat * 1000);
+		//time = actualtime();
+		philo->time = actualtime();
 		pthread_mutex_unlock(philo->left);
 		pthread_mutex_unlock(philo->right);
-		printf("\e[33m%lld philo %d is sleeping\n", timestamp(time), philo->nu_philo);
-		ft_usleep(philo->t_sleep);
+		if (count == philo->nb_eat || philo->death)
+			return (NULL);
+		printf("\e[35m%lld philo %d is sleeping\n", timestamp(time), philo->nu_philo);
+		usleep(philo->t_sleep * 1000);
+		if (philo->death)
+			return (NULL);
 		printf("\e[34m%lld philo %d is thinking\n", timestamp(time), philo->nu_philo);
 		usleep(200);
 	}
 	return (NULL);
+}
+
+void	*death(void *arg)
+{
+	int		i;
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	while (1)
+	{
+		i = -1;
+		while (++i < philo->nb_philo)
+		{
+			if (timestamp(philo[i].time) > philo->t_die)
+			{
+				i = -1;
+				while (++i < philo->nb_philo)
+				{
+					printf("\e[31m%lld philo %d died\n", timestamp(philo[i].time), philo->nu_philo);
+					philo[i].death = 1;
+				}
+				return (NULL);
+			}
+		}
+	}
 }
 
 void	philosophers(t_philo *philo)
@@ -50,25 +79,19 @@ void	philosophers(t_philo *philo)
 	int			i;
 	pthread_t	*thread;
 
-	pthread_mutex_init(philo->mutex, NULL);
-	printf("%d\n", philo->nb_philo);
-	write(1, "test\n", 5);
-	thread = malloc(sizeof(pthread_t) * philo->nb_philo);
-	write(1, "test\n", 5);
+	thread = malloc(sizeof(pthread_t) * philo->nb_philo + 1);
 	i = -1;
 	while (++i < philo->nb_philo)
-	{
-		pthread_mutex_init(philo[i].right, NULL);
 		pthread_mutex_init(philo[i].left, NULL);
-		pthread_create(&thread[i], NULL, &routine, philo + i);
-	}
 	i = -1;
 	while (++i < philo->nb_philo)
-	{
+		pthread_create(thread + i, NULL, &routine, philo + i);
+	pthread_create(thread + i, NULL, &death, philo);
+	i = -1;
+	while (++i < philo->nb_philo)
 		pthread_join(thread[i], NULL);
-		pthread_mutex_destroy(philo[i].right);
+	i = -1;
+	while (++i < philo->nb_philo)
 		pthread_mutex_destroy(philo[i].left);
-	}
-	pthread_mutex_destroy(philo->mutex);
-	//free(thread);
+	free(thread);
 }
