@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alois <alois@student.42.fr>                +#+  +:+       +#+        */
+/*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:20:05 by alois             #+#    #+#             */
-/*   Updated: 2021/10/03 17:03:26 by alois            ###   ########.fr       */
+/*   Updated: 2021/10/04 12:01:56 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,22 @@ void	*routine(void *arg)
 	count = 0;
 	while (1)
 	{
-		pthread_mutex_lock(philo->left_fork);
+		pthread_mutex_lock(philo->left);
 		printf("\e[32m%lld philo %d has taken a fork\n", timestamp(time), philo->nu_philo);
-		pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_lock(philo->right);
 		printf("\e[32m%lld philo %d has taken a fork\n", timestamp(time), philo->nu_philo);
-		if (philo->info->nb_eat != -1)
+		if (philo->nb_eat != -1)
 		{
 			count += 1;
-			if (count == philo->info->nb_eat)
+			if (count == philo->nb_eat)
 				return (NULL);
 		}
 		printf("\e[33m%lld philo %d is eating (%d)\n", timestamp(time), philo->nu_philo, count);
-		ft_usleep(philo->info->t_eat);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
+		ft_usleep(philo->t_eat);
+		pthread_mutex_unlock(philo->left);
+		pthread_mutex_unlock(philo->right);
 		printf("\e[33m%lld philo %d is sleeping\n", timestamp(time), philo->nu_philo);
-		ft_usleep(philo->info->t_sleep);
+		ft_usleep(philo->t_sleep);
 		printf("\e[34m%lld philo %d is thinking\n", timestamp(time), philo->nu_philo);
 		usleep(200);
 	}
@@ -50,24 +50,25 @@ void	philosophers(t_philo *philo)
 	int			i;
 	pthread_t	*thread;
 
-	printf("%d\n", philo->info->nb_philo);
-	thread = malloc(sizeof(thread) * philo->info->nb_philo);
-	write(1, "test\n", 5);
 	pthread_mutex_init(philo->mutex, NULL);
+	printf("%d\n", philo->nb_philo);
+	write(1, "test\n", 5);
+	thread = malloc(sizeof(pthread_t) * philo->nb_philo);
+	write(1, "test\n", 5);
 	i = -1;
-	while (++i < philo->info->nb_philo)
+	while (++i < philo->nb_philo)
 	{
-		pthread_mutex_init(philo[i].right_fork, NULL);
-		pthread_mutex_init(philo[i].left_fork, NULL);
+		pthread_mutex_init(philo[i].right, NULL);
+		pthread_mutex_init(philo[i].left, NULL);
 		pthread_create(&thread[i], NULL, &routine, philo + i);
 	}
 	i = -1;
-	while (++i < philo->info->nb_philo)
+	while (++i < philo->nb_philo)
 	{
 		pthread_join(thread[i], NULL);
-		pthread_mutex_destroy(philo[i].right_fork);
-		pthread_mutex_destroy(philo[i].left_fork);
+		pthread_mutex_destroy(philo[i].right);
+		pthread_mutex_destroy(philo[i].left);
 	}
 	pthread_mutex_destroy(philo->mutex);
-	free(thread);
+	//free(thread);
 }
