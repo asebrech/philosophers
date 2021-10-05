@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:19:02 by alois             #+#    #+#             */
-/*   Updated: 2021/10/05 13:49:20 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/05 16:17:28 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,12 @@ t_philo	*fill_philo(int ac, char **av)
 {
 	int				i;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	*mutex;
 	t_philo			*philo;
 	int				nb;				
 
 	nb = ft_atoi(av[0]);
+	mutex = malloc(sizeof(pthread_mutex_t));
 	fork = malloc(sizeof(pthread_mutex_t) * nb);
 	philo = malloc(sizeof(t_philo) * nb);
 	i = -1;
@@ -70,6 +72,7 @@ t_philo	*fill_philo(int ac, char **av)
 		fill_philo_1(ac, av, philo, i);
 		philo[i].nb_philo = nb;
 		philo[i].nu_philo = i + 1;
+		philo[i].mutex = mutex;
 		philo[i].left = fork + i;
 		if (i == philo->nb_philo - 1)
 			philo[i].right = fork;

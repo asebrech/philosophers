@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:20:05 by alois             #+#    #+#             */
-/*   Updated: 2021/10/05 14:00:18 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/05 17:05:24 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,27 @@
 
 void	routine_1(t_philo *philo, int *count)
 {
+	pthread_mutex_lock(philo->left);
+	pthread_mutex_lock(philo->mutex);
+	printf("\e[32m%lld philo %d has taken a fork\n",
+		timestamp(philo->timestamp), philo->nu_philo);
+	pthread_mutex_unlock(philo->mutex);
+	pthread_mutex_lock(philo->right);
+	pthread_mutex_lock(philo->mutex);
 	printf("\e[32m%lld philo %d has taken a fork\n", timestamp(philo->timestamp),
 		philo->nu_philo);
+	pthread_mutex_unlock(philo->mutex);
 	*count += 1;
+	pthread_mutex_lock(philo->mutex);
 	printf("\e[33m%lld philo %d is eating (%d)\n", timestamp(philo->timestamp),
 		philo->nu_philo, *count);
+	pthread_mutex_unlock(philo->mutex);
 	if (*count == philo->nb_eat)
 		philo->count = 1;
 	philo->time = actualtime();
 	ft_usleep(philo->t_eat);
+	pthread_mutex_unlock(philo->left);
+	pthread_mutex_unlock(philo->right);
 }
 
 void	*routine(void *arg)
@@ -36,22 +48,27 @@ void	*routine(void *arg)
 	count = 0;
 	while (1)
 	{
-		pthread_mutex_lock(philo->left);
-		printf("\e[32m%lld philo %d has taken a fork\n",
-			timestamp(philo->timestamp), philo->nu_philo);
-		pthread_mutex_lock(philo->right);
 		routine_1(philo, &count);
-		pthread_mutex_unlock(philo->left);
-		pthread_mutex_unlock(philo->right);
 		if (count == philo->nb_eat)
 			return (NULL);
+		pthread_mutex_lock(philo->mutex);
 		printf("\e[35m%lld philo %d is sleeping\n",
 			timestamp(philo->timestamp), philo->nu_philo);
+		pthread_mutex_unlock(philo->mutex);
 		ft_usleep(philo->t_sleep);
+		pthread_mutex_lock(philo->mutex);
 		printf("\e[34m%lld philo %d is thinking\n",
 			timestamp(philo->timestamp), philo->nu_philo);
+		pthread_mutex_unlock(philo->mutex);
 	}
 	return (NULL);
+}
+
+void	death_1(t_philo *philo, int i)
+{
+	pthread_mutex_lock(philo->mutex);
+	printf("\e[31m%lld philo %d died\n",
+		timestamp(philo[i].timestamp), philo[i].nu_philo);
 }
 
 void	*death(void *arg)
@@ -69,8 +86,7 @@ void	*death(void *arg)
 		{
 			if (timestamp(philo[i].time) > philo->t_die && !philo[i].count)
 			{
-				printf("\e[31m%lld philo %d died\n",
-					timestamp(philo[i].timestamp), philo[i].nu_philo);
+				death_1(philo, i);
 				return (NULL);
 			}
 			if (philo[i].count)
@@ -92,6 +108,7 @@ void	philosophers(t_philo *philo)
 	i = -1;
 	while (++i < philo->nb_philo)
 		pthread_mutex_init(philo[i].left, NULL);
+	pthread_mutex_init(philo->mutex, NULL);
 	i = -1;
 	while (++i < philo->nb_philo)
 	{
@@ -106,5 +123,6 @@ void	philosophers(t_philo *philo)
 	i = -1;
 	while (++i < philo->nb_philo)
 		pthread_mutex_destroy(philo[i].left);
+	pthread_mutex_destroy(philo->mutex);
 	free(thread);
 }

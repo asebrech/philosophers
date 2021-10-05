@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:16:48 by alois             #+#    #+#             */
-/*   Updated: 2021/10/05 13:49:23 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/05 16:26:11 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo
 	int				nb_eat;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
+	pthread_mutex_t	*mutex;
 }				t_philo;
 
 void		philosophers(t_philo *philo);
