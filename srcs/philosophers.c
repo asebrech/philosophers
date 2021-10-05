@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:20:05 by alois             #+#    #+#             */
-/*   Updated: 2021/10/05 13:08:13 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/05 14:00:18 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void	routine_1(t_philo *philo, int *count)
 	printf("\e[32m%lld philo %d has taken a fork\n", timestamp(philo->timestamp),
 		philo->nu_philo);
 	*count += 1;
-	if (*count == philo->nb_eat)
-		philo->count = 1;
 	printf("\e[33m%lld philo %d is eating (%d)\n", timestamp(philo->timestamp),
 		philo->nu_philo, *count);
+	if (*count == philo->nb_eat)
+		philo->count = 1;
 	philo->time = actualtime();
 	ft_usleep(philo->t_eat);
 }
@@ -54,17 +54,6 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-void	death_1(t_philo *philo, int i)
-{
-	printf("\e[31m%lld philo %d died\n", timestamp(philo[i].timestamp),
-		philo[i].nu_philo);
-	i = -1;
-	while (++i < philo->nb_philo)
-	{
-		philo[i].death = 1;
-	}
-}
-
 void	*death(void *arg)
 {
 	int		i;
@@ -80,7 +69,8 @@ void	*death(void *arg)
 		{
 			if (timestamp(philo[i].time) > philo->t_die && !philo[i].count)
 			{
-				death_1(philo, i);
+				printf("\e[31m%lld philo %d died\n",
+					timestamp(philo[i].timestamp), philo[i].nu_philo);
 				return (NULL);
 			}
 			if (philo[i].count)
