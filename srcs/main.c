@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:19:02 by alois             #+#    #+#             */
-/*   Updated: 2021/10/05 11:57:23 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/05 12:26:36 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	check_args(int ac, char **av)
 void	fill_philo_1(int ac, char **av, t_philo *philo, int i)
 {
 	philo[i].time = 0;
+	philo[i].timestamp = 0;
 	philo[i].death = 0;
 	philo[i].count = 0;
 	philo[i].t_die = ft_atoi(av[1]);

@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:16:48 by alois             #+#    #+#             */
-/*   Updated: 2021/10/05 10:53:51 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/05 12:26:07 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 typedef struct s_philo
 {
 	long long		time;
+	long long		timestamp;
 	int				death;
 	int				count;
 	int				nu_philo;
