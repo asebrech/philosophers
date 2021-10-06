@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:19:02 by alois             #+#    #+#             */
-/*   Updated: 2021/10/05 16:17:28 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/06 11:30:59 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	check_args(int ac, char **av)
 	while (i < ac)
 	{
 		tmp = ft_atoi(av[i]);
-		if (tmp > INT_MAX)
+		if ((i == 0 && tmp <= 0) || tmp > INT_MAX)
 		{
-			printf("Error\narguments too long\n");
+			printf("Error\narguments too large or not large enough\n");
 			return (1);
 		}
 		i++;

@@ -6,14 +6,14 @@
 #    By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/23 16:13:10 by asebrech          #+#    #+#              #
-#    Updated: 2021/09/27 14:00:55 by asebrech         ###   ########.fr        #
+#    Updated: 2021/10/06 11:29:32 by asebrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 HEADER = includes
-NAME = philosophers
+NAME = philo
 RM = rm -rf
 SRC =	srcs/main.c	\
 		srcs/utiles.c \
