@@ -1,8 +1,7 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory `/Users/asebrech/Documents/philosophers'
-gcc -Wall -Wextra -Werror -Iincludes -c srcs/main.c -o srcs/main.o
-gcc -Wall -Wextra -Werror -Iincludes -c srcs/utiles.c -o srcs/utiles.o
-gcc -Wall -Wextra -Werror -Iincludes -c srcs/philosophers.c -o srcs/philosophers.o
-gcc -Wall -Wextra -Werror -pthread -Iincludes srcs/main.o srcs/utiles.o srcs/philosophers.o -o philo
+ 
 make: Leaving directory `/Users/asebrech/Documents/philosophers'
+ 
+make: *** No targets specified and no makefile found.  Stop.
  
