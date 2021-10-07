@@ -6,7 +6,7 @@
 #    By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/23 16:13:10 by asebrech          #+#    #+#              #
-#    Updated: 2021/10/06 11:44:29 by asebrech         ###   ########.fr        #
+#    Updated: 2021/10/07 13:59:28 by asebrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,22 +17,16 @@ NAME = philo_bonus
 RM = rm -rf
 SRC =	srcs_bonus/main_bonus.c	\
 		srcs_bonus/utiles_bonus.c \
-		srcs_bonus/philosophers_bonus.c	
-SRCB =
-
-ifdef WHITH_BONUS
-	OBJ = $(SRC:.c=.o)
-else
-	OBJ = $(SRC:.c=.o)
-endif
+		srcs_bonus/philosophers_bonus.c	\
+		srcs_bonus/philosophers_1_bonus.c	
+OBJ = $(SRC:.c=.o)
 
 .c.o :
 	$(CC) $(CFLAGS) -I$(HEADER) -c $< -o $(<:.c=.o)
 
 all : $(NAME)
 
-bonus :
-	@make WHITH_BONUS=1 all
+bonus : all
 
 $(NAME) : $(OBJ)
 	$(CC) $(CFLAGS) -pthread -I$(HEADER) $(OBJ) -o $(NAME)

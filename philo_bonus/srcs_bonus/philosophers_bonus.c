@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 11:42:47 by asebrech          #+#    #+#             */
-/*   Updated: 2021/10/06 18:54:29 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/07 14:02:52 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,22 @@ void	routine_1(t_philo *philo, int *count)
 	sem_post(philo->forks);
 }
 
+void	routine_2(t_philo *philo, int count)
+{
+	int	i;
+
+	if (count == philo->nb_eat)
+	{
+		sem_post(philo->sema_eat);
+		sem_wait(philo->toto);
+		i = -1;
+		while (++i < philo->nb_philo)
+			sem_wait(philo->sema_eat);
+		kill(philo->kill, SIGKILL);
+		exit(0);
+	}
+}
+
 void	routine(t_philo *philo)
 {
 	int			count;
@@ -45,8 +61,7 @@ void	routine(t_philo *philo)
 	while (1)
 	{
 		routine_1(philo, &count);
-		if (count == philo->nb_eat)
-			exit(0);
+		routine_2(philo, count);
 		sem_wait(philo->semaphore);
 		printf("\e[35m%lld philo %d is sleeping\n",
 			timestamp(philo->timestamp), philo->nu_philo);
@@ -59,22 +74,25 @@ void	routine(t_philo *philo)
 	}
 }
 
-void	*death(void *arg)
+void	philo_1(t_philo *philo, int i, pthread_t *thread, pid_t *pid)
 {
-	int		i;
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	while (1)
+	if (i == -1)
 	{
-		if (timestamp(philo[philo->nu].time) > philo->t_die)
+		*pid = fork();
+		if (*pid == 0)
 		{
-			printf("\e[31m%lld philo %d died\n",
-				timestamp(philo[philo->nu].timestamp), philo[philo->nu].nu_philo);
-			i = -1;
-			while (++i < philo->nb_philo)
-				kill(philo[i].pid, SIGKILL);
-			exit(0);
+			while (1)
+				;
+		}
+	}
+	else
+	{
+		philo[i].pid = fork();
+		if (philo[i].pid == 0)
+		{
+			philo[i].kill = *pid;
+			pthread_create(thread, NULL, &death, &philo[i]);
+			routine(&philo[i]);
 		}
 	}
 }
@@ -83,23 +101,19 @@ void	philosophers(t_philo *philo)
 {
 	int			i;
 	pthread_t	*thread;
+	pid_t		pid;
 
-	i = -1;
 	thread = malloc(sizeof(pthread_t));
+	i = -2;
 	while (++i < philo->nb_philo)
-	{
-		philo[i].pid = fork();
-		if (philo[i].pid == 0)
-		{
-			philo->nu = i;
-			pthread_create(thread, NULL, &death, philo);
-			routine(&philo[i]);
-		}
-		usleep(100);
-	}
+		philo_1(philo, i, thread, &pid);
+	waitpid(pid, NULL, 0);
 	i = -1;
 	while (++i < philo->nb_philo)
-		wait(NULL);
+		kill(philo[i].pid, SIGKILL);
 	sem_close(philo->forks);
 	sem_close(philo->semaphore);
+	sem_close(philo->sema_eat);
+	sem_close(philo->toto);
+	free(thread);
 }

@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 11:41:58 by asebrech          #+#    #+#             */
-/*   Updated: 2021/10/06 18:12:42 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/07 13:43:58 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,45 +40,58 @@ int	check_args(int ac, char **av)
 	return (0);
 }
 
-void	fill_philo_1(int ac, char **av, t_philo *philo, int i)
+t_philo	*fill_philo_1(int ac, char **av)
 {
-	philo[i].time = 0;
-	philo[i].timestamp = 0;
-	philo[i].count = 0;
-	philo[i].t_die = ft_atoi(av[1]);
-	philo[i].t_eat = ft_atoi(av[2]);
-	philo[i].t_sleep = ft_atoi(av[3]);
-	if (ac == 5)
-		philo[i].nb_eat = ft_atoi(av[4]);
-	else
-		philo[i].nb_eat = -1;
-}
-
-t_philo	*fill_philo(int ac, char **av)
-{
-	int				i;
-	sem_t			*forks;
-	sem_t			*semaphore;
 	t_philo			*philo;
+	int				i;
 	int				nb;				
 
 	nb = ft_atoi(av[0]);
-	sem_unlink("forks");
-	sem_unlink("semaphore");
-	forks = sem_open("forks", O_CREAT, S_IRWXU, nb);
-	semaphore = sem_open("semaphore", O_CREAT, S_IRWXU, 1);
 	philo = malloc(sizeof(t_philo) * nb);
 	i = -1;
 	while (++i < nb)
 	{
-		fill_philo_1(ac, av, philo, i);
 		philo[i].nb_philo = nb;
-		philo[i].nu_philo = i + 1;
-		philo[i].nu = 0;
-		philo[i].semaphore = semaphore;
-		philo[i].forks = forks;
+		philo[i].time = 0;
+		philo[i].timestamp = 0;
+		philo[i].count = 0;
+		philo[i].t_die = ft_atoi(av[1]);
+		philo[i].t_eat = ft_atoi(av[2]);
+		philo[i].t_sleep = ft_atoi(av[3]);
+		if (ac == 5)
+			philo[i].nb_eat = ft_atoi(av[4]);
+		else
+			philo[i].nb_eat = -1;
 	}
 	return (philo);
+}
+
+void	fill_philo(t_philo *philo)
+{
+	int				i;
+	sem_t			*forks;
+	sem_t			*semaphore;
+	sem_t			*sema_eat;
+	sem_t			*toto;
+
+	sem_unlink("forks");
+	sem_unlink("semaphore");
+	sem_unlink("sema_eat");
+	sem_unlink("toto");
+	forks = sem_open("forks", O_CREAT, S_IRWXU, philo->nb_philo);
+	semaphore = sem_open("semaphore", O_CREAT, S_IRWXU, 1);
+	sema_eat = sem_open("sema_eat", O_CREAT, S_IRWXU, 0);
+	toto = sem_open("toto", O_CREAT, S_IRWXU, 1);
+	i = -1;
+	while (++i < philo->nb_philo)
+	{
+		philo[i].nu_philo = i + 1;
+		philo[i].kill = 0;
+		philo[i].semaphore = semaphore;
+		philo[i].sema_eat = sema_eat;
+		philo[i].toto = toto;
+		philo[i].forks = forks;
+	}
 }
 
 int	main(int ac, char **av)
@@ -89,7 +102,8 @@ int	main(int ac, char **av)
 	{
 		if (check_args(ac - 1, av + 1))
 			return (1);
-		philo = fill_philo(ac - 1, av + 1);
+		philo = fill_philo_1(ac - 1, av + 1);
+		fill_philo(philo);
 		philosophers(philo);
 		free(philo);
 	}

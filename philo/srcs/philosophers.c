@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:20:05 by alois             #+#    #+#             */
-/*   Updated: 2021/10/05 17:05:24 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/07 11:51:23 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	*death(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	usleep(100);
 	while (1)
 	{
 		count = 0;
