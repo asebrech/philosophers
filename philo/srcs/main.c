@@ -6,7 +6,7 @@
 /*   By: asebrech <asebrech@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 12:19:02 by alois             #+#    #+#             */
-/*   Updated: 2021/10/06 11:30:59 by asebrech         ###   ########.fr       */
+/*   Updated: 2021/10/07 14:35:39 by asebrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	main(int ac, char **av)
 		philo = fill_philo(ac - 1, av + 1);
 		philosophers(philo);
 		free(philo->left);
+		free(philo->mutex);
 		free(philo);
 	}
 	else if (ac != 1)
